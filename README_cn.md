@@ -1,4 +1,4 @@
-![](./docs/assets/sophgo_chip.png)
+ ![](./docs/assets/sophgo_chip.png)
 
 # TPU-MLIR
 

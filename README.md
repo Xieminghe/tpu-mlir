@@ -6,7 +6,6 @@ For Chinese version: [README](https://github.com/sophgo/tpu-mlir/blob/master/REA
 
 TPU-MLIR is an open-source machine-learning compiler based on MLIR for TPU. This project provides a complete toolchain, which can convert pre-trained neural networks from different frameworks into binary files `bmodel` that can be efficiently operated on TPUs.
 
-
 SOPHGO aims to become a leading global provider of general-purpose computing power. SOPHGO focuses on the research, development, and promotion of computing products such as AI and RISC-V CPUs, and has built a comprehensive application matrix covering the 'cloud, edge, and endpoint' scenarios with its self-developed products. SOPHGO provides computing products and integrated solutions for applications such as smart cities, intelligent computing centers, smart security, intelligent transportation, safety production, industrial quality inspection, and intelligent terminals. The company has research and development centers in more than 10 cities in China including Beijing, Shanghai, Shenzhen, Qingdao, and Xiamen, as well as in the United States and Singapore.
 
 Currently, supported AI frameworks are PyTorch, ONNX, TFLite and Caffe. Models from other frameworks need to be converted to ONNX models.

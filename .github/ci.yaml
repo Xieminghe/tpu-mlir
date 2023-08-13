@@ -1,0 +1,46 @@
+name: Docker Workflow
+
+on:
+  push:
+    branches:
+      - master  # Change this to your default branch if different
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Docker
+      uses: docker/setup-docker@v2
+      with:
+        dockerfile: Dockerfile  # Path to your Dockerfile if needed
+
+    - name: Pull Docker image
+      run: docker pull sophgo/tpuc_dev:latest
+
+    - name: Run Docker container
+      run: |
+        docker run --privileged --name myname1234 -v $PWD:/workspace -it sophgo/tpuc_dev:latest
+        source ./envsetup.sh
+        ./build.sh
+        mkdir model_yolov5s && cd model_yolov5s
+        cp ${REGRESSION_PATH}/model/yolov5s.onnx .
+        cp -rf ${REGRESSION_PATH}/dataset/COCO2017 .
+        cp -rf ${REGRESSION_PATH}/image .
+        touch ${INSTALL_PATH}/python/mlir/__init__.py
+        mkdir workspace && cd workspace
+        model_transform.py \
+            --model_name yolov5s \
+            --model_def ../yolov5s.onnx \
+            --input_shapes [[1,3,640,640]] \
+            --mean 0.0,0.0,0.0 \
+            --scale 0.0039216,0.0039216,0.0039216 \
+            --keep_aspect_ratio \
+            --pixel_format rgb \
+            --output_names 350,498,646 \
+            --test_input ../image/dog.jpg \
+            --test_result yolov5s_top_outputs.npz \
+            --mlir yolov5s.mlir

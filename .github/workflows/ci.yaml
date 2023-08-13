@@ -39,4 +39,18 @@ jobs:
             --test_input ../image/dog.jpg \\
             --test_result yolov5s_top_outputs.npz \\
             --mlir yolov5s.mlir
+
+        ./release.sh
         "
+
+    # - name: Copy file from container
+    #   run: docker cp myname1234:/workspace/tpu-mlir/tpu-mlir_v1.3.beta.0-20230813.tar.gz $GITHUB_WORKSPACE/
+
+    # - name: Upload Release Asset
+    #   uses: actions/upload-release-asset@v1
+    #   with:
+    #     upload_url: ${{ github.event.release.upload_url }}
+    #     asset_path: ./tpu-mlir_v1.3.beta.0-20230813.tar.gz
+    #     asset_name: tpu-mlir_v1.3.beta.0-20230813.tar.gz
+    #     asset_content_type: application/gzip
+    #     token: ${{ secrets.GITHUB_TOKEN }}

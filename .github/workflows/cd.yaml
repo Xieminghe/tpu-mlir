@@ -33,14 +33,12 @@ jobs:
         fi
         echo "FILE_PATH=$FILE_PATH" >> $GITHUB_ENV
 
-    - name: Create Release
-      id: create_release
-      uses: actions/create-release@master
+    - name: Release
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        tag_name:  ${{ env.FILE_PATH }}
-        release_name: ${{ env.FILE_PATH }}
-        draft: false
-        prerelease: false
+      run: >-
+        gh release create ${{ env.FILE_PATH }}
+        "$GITHUB_WORKSPACE/${{ env.FILE_PATH }}"
+        --generate-notes
+        --title "Release ${{ env.FILE_PATH }}"
 

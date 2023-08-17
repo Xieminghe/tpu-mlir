@@ -13,30 +13,26 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v2
 
-    # - name: Pull Docker image
-    #   run: docker pull sophgo/tpuc_dev:latest
+    - name: Pull Docker image
+      run: docker pull sophgo/tpuc_dev:latest
 
-    # - name: Run Docker container
-    #   run: |
-    #     docker run --privileged --name myname1234 -v $PWD:/workspace sophgo/tpuc_dev:latest /bin/bash -c "
-    #       ./release.sh
-    #     "
+    - name: Run Docker container
+      run: |
+        docker run --privileged --name myname1234 -v $PWD:/workspace sophgo/tpuc_dev:latest /bin/bash -c "
+          ./release.sh
+        "
 
     - name: Find and copy .tar.gz file
       run: |
-        # docker start myname1234
-        # FILE_PATH=$(docker exec myname1234 find /workspace -type f -name "*.tar.gz" -print -quit)
-        # if [ -n "$FILE_PATH" ]; then
-        #   docker cp myname1234:"$FILE_PATH" $GITHUB_WORKSPACE/
-        # else
-        #   echo "File not found in container"
-        # fi
-        FILE_PATH=tpu-mlir_v1.3.beta.0-20230813.tar.gz
+        docker start myname1234
+        FILE_PATH=$(docker exec myname1234 find /workspace -type f -name "*.tar.gz" -print -quit)
+        if [ -n "$FILE_PATH" ]; then
+          docker cp myname1234:"$FILE_PATH" $GITHUB_WORKSPACE/
+        else
+          echo "File not found in container"
+        fi
         echo "FILE_PATH=$FILE_PATH" >> $GITHUB_ENV
 
-    - name : test
-      run: |
-        echo ${{ env.FILE_PATH }}
     - name: Create Release
       id: create_release
       uses: actions/create-release@master

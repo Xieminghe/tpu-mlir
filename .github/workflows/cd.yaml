@@ -32,8 +32,11 @@ jobs:
         #   echo "File not found in container"
         # fi
         FILE_PATH=tpu-mlir_v1.3.beta.0-20230813.tar.gz
-        echo "FILE_PATH=\$FILE_PATH" >> $GITHUB_ENV
+        echo "FILE_PATH=$FILE_PATH" >> $GITHUB_ENV
 
+    - name : test
+      run: |
+        echo ${{ env.FILE_PATH }}
     - name: Create Release
       id: create_release
       uses: actions/create-release@master

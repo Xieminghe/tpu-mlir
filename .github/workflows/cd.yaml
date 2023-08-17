@@ -1,0 +1,37 @@
+name: Build and release
+
+on: [workflow_dispatch]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Pull Docker image
+      run: docker pull sophgo/tpuc_dev:latest
+
+    # - name: Run Docker container
+    #   run: |
+    #     docker run --privileged --name myname1234 -v $PWD:/workspace sophgo/tpuc_dev:latest /bin/bash -c "
+    #       ./release.sh
+    #     "
+
+    # - name: Copy file from container
+    #   run: docker cp myname1234:/workspace/tpu-mlir/tpu-mlir_v1.3.beta.0-20230813.tar.gz $GITHUB_WORKSPACE/
+
+    - name: Build
+      run: echo ${{ github.sha }} > Release.txt
+    - name: Test
+      run: cat Release.txt
+    - name: Release
+      uses: softprops/action-gh-release@v1
+      # if: startsWith(github.ref, 'refs/tags/')
+      with:
+        name: "Release name"
+        body: "Release note"
+        files: Release.txt
+        generate_release_notes: true
+

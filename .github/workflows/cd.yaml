@@ -18,7 +18,7 @@ jobs:
 
     - name: Run Docker container
       run: |
-        docker run --privileged --name myname1234 -v $PWD:/workspace sophgo/tpuc_dev:latest /bin/bash -c "
+        docker run --privileged --name myname1234 -v $PWD:/workspace sophgo/tpuc_dev:v2.2 /bin/bash -c "
           ./release.sh
         "
 

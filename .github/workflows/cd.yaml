@@ -31,6 +31,7 @@ jobs:
         else
           echo "File not found in container"
         fi
+        FILE_PATH=${FILE_PATH#/workspace/}
         echo "FILE_PATH=$FILE_PATH" >> $GITHUB_ENV
 
     - name: Release

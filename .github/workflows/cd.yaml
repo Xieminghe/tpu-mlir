@@ -2,8 +2,8 @@ name: Build and release
 
 on:
   push:
-    tags:
-      - 'v*.*'
+    branches:
+      - master
 
 jobs:
   build:
@@ -22,21 +22,26 @@ jobs:
     #       ./release.sh
     #     "
 
-    # - name: Copy file from container
-    #   run: docker cp myname1234:/workspace/tpu-mlir/tpu-mlir_v1.3.beta.0-20230813.tar.gz $GITHUB_WORKSPACE/
+    - name: Find and copy .tar.gz file
+      run: |
+        # docker start myname1234
+        # FILE_PATH=$(docker exec myname1234 find /workspace -type f -name "*.tar.gz" -print -quit)
+        # if [ -n "$FILE_PATH" ]; then
+        #   docker cp myname1234:"$FILE_PATH" $GITHUB_WORKSPACE/
+        # else
+        #   echo "File not found in container"
+        # fi
+        FILE_PATH=tpu-mlir_v1.3.beta.0-20230813.tar.gz
+        echo "FILE_PATH=\$FILE_PATH" >> $GITHUB_ENV
 
-    - name: Build
-      run: echo ${{ github.sha }} > Release.txt
-    - name: Test
-      run: cat Release.txt
-    - name: Release
-      uses: softprops/action-gh-release@v1
-
-      with:
-        name: "Release name"
-        body: "Release note"
-        files: Release.txt
-        generate_release_notes: true
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@master
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name:  ${{ env.FILE_PATH }}
+        release_name: ${{ env.FILE_PATH }}
+        draft: false
+        prerelease: false
 

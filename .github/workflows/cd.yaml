@@ -27,7 +27,9 @@ jobs:
         docker start myname1234
         FILE_PATH=$(docker exec myname1234 find /workspace -type f -name "*.tar.gz" -print -quit)
         if [ -n "$FILE_PATH" ]; then
-          docker cp myname1234:"$FILE_PATH" $GITHUB_WORKSPACE/
+          docker cp myname1234:"$FILE_PATH" ./
+          ls -al
+          pwd
         else
           echo "File not found in container"
         fi
@@ -39,7 +41,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: >-
         gh release create ${{ env.FILE_PATH }}
-        "$GITHUB_WORKSPACE/${{ env.FILE_PATH }}"
+        "./${{ env.FILE_PATH }}"
         --generate-notes
         --title "Release ${{ env.FILE_PATH }}"
 

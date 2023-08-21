@@ -35,8 +35,9 @@ jobs:
         # Combine MAIN_VERSION and PATCH_VERSION
         GIT_SHORT_HASH="${MAIN_VERSION}.${PATCH_VERSION}"
 
+        BUILD_TIME=$(date "+%Y%m%d")
         # Print the final version
-        echo "GIT_SHORT_HASH=${GIT_SHORT_HASH}" >> $GITHUB_ENV
+        echo "GIT_SHORT_HASH=${GIT_SHORT_HASH}-${BUILD_TIME}" >> $GITHUB_ENV
 
     - name: Pull Docker image
       run: docker pull sophgo/tpuc_dev:latest

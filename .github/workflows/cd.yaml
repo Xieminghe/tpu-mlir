@@ -18,6 +18,8 @@ jobs:
 
     - name: Run Docker container
       run: |
+        echo "GIT_SHORT_HASH"
+
         docker run --privileged --name myname1234 -v $PWD:/workspace sophgo/tpuc_dev:v2.2 /bin/bash -c "
           ./release.sh
         "

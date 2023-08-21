@@ -43,7 +43,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
       run: >-
-        gh release create ${{ env.FILE_PATH }}
+        gh release create ${git describe --tags --always}
         "./${{ env.FILE_PATH }}"
         --generate-notes
         --title "Release ${{ env.FILE_PATH }}"

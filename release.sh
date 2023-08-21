@@ -44,5 +44,9 @@ export REGRESSION_PATH=${TPUC_ROOT}/regression
 # ------------------------------------------------------------------------------
 
 
-tar -cvzf "tpu-mlir_${mlir_version}.tar.gz" ${release_archive}
+#tar -cvzf "tpu-mlir_${mlir_version}.tar.gz" ${release_archive}
+#rm -rf ${release_archive}
+
+version_name="mlir_version"
+tar -cvzf "tpu-mlir_${version_name}.tar.gz" ${release_archive}
 rm -rf ${release_archive}

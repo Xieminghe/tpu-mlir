@@ -19,8 +19,24 @@ jobs:
     - name: Get Git Tag
       id: get_git_tag
       run: |
-        GIT_TAG=$(git describe --tags --always)
-        echo "GIT_TAG=${GIT_TAG}" >> $GITHUB_ENV
+        # Get the latest tag
+        GIT_SHORT_HASH=$(git describe --tags --always)
+
+        # Strip leading and trailing whitespace
+        GIT_SHORT_HASH=$(echo $GIT_SHORT_HASH | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')
+
+        # Find the position of the first hyphen (-)
+        iLength=$(expr index "$GIT_SHORT_HASH" -)
+
+        # Extract the MAIN_VERSION and PATCH_VERSION
+        MAIN_VERSION=${GIT_SHORT_HASH:0:iLength-1}
+        PATCH_VERSION=${GIT_SHORT_HASH:iLength}
+
+        # Combine MAIN_VERSION and PATCH_VERSION
+        GIT_SHORT_HASH="${MAIN_VERSION}.${PATCH_VERSION}"
+
+        # Print the final version
+        echo "GIT_SHORT_HASH=${GIT_SHORT_HASH}" >> $GITHUB_ENV
 
     - name: Pull Docker image
       run: docker pull sophgo/tpuc_dev:latest
@@ -51,8 +67,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
       run: >-
-        gh release create ${{ env.GIT_TAG }}
+        gh release create "tpu-mlir_${{ env.GIT_SHORT_HASH }}.tar.gz"
         "./${{ env.FILE_PATH }}"
         --generate-notes
-        --title "Release ${{ env.FILE_PATH }}"
+        --title "Release tpu-mlir_${{ env.GIT_SHORT_HASH }}.tar.gz"
 

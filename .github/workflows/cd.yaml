@@ -61,7 +61,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
       run: >-
         gh release create "${{ env.GIT_SHORT_HASH }}"
-        "./${{ env.FILE_PATH }}"
+        "${{ env.FILE_PATH }}"
         --generate-notes
         --title "Release tpu-mlir_${{ env.GIT_SHORT_HASH }}-${{ env.BUILD_TIME }}.tar.gz"
 

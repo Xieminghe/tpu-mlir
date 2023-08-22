@@ -22,31 +22,23 @@ jobs:
         # Get the latest tag
         GIT_SHORT_HASH=$(git describe --tags --always)
 
-        # Strip leading and trailing whitespace
-        GIT_SHORT_HASH=$(echo $GIT_SHORT_HASH | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')
+        # Use regex to extract the version
+        first_part=$(echo "$GIT_SHORT_HASH" | cut -d '-' -f1)
 
-        # Find the position of the first hyphen (-)
-        iLength=$(expr index "$GIT_SHORT_HASH" -)
-
-        # Extract the MAIN_VERSION and PATCH_VERSION
-        MAIN_VERSION=${GIT_SHORT_HASH:0:iLength-1}
-        PATCH_VERSION=${GIT_SHORT_HASH:iLength}
-
-        # Combine MAIN_VERSION and PATCH_VERSION
-        GIT_SHORT_HASH="${MAIN_VERSION}.${PATCH_VERSION}"
-
-        BUILD_TIME=$(date "+%Y%m%d")
         # Print the final version
-        echo "GIT_SHORT_HASH=${GIT_SHORT_HASH}-${BUILD_TIME}" >> $GITHUB_ENV
+        echo "GIT_SHORT_HASH=${first_part}" >> $GITHUB_ENV
 
-    - name: Pull Docker image
-      run: docker pull sophgo/tpuc_dev:latest
+        echo 'BUILD_TIME=$(date "+%Y%m%d")' >> $GITHUB_ENV
+
+    # - name: Pull Docker image
+    #   run: docker pull sophgo/tpuc_dev:latest
 
     - name: Run Docker container
       run: |
         git describe --tags --always
 
         docker run --privileged --name myname1234 -v $PWD:/workspace sophgo/tpuc_dev:v2.2 /bin/bash -c "
+          find . -type f -name "*.tar.gz" -exec rm -f {} \;
           ./release.sh
         "
 
@@ -68,8 +60,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
       run: >-
-        gh release create "tpu-mlir_${{ env.GIT_SHORT_HASH }}.tar.gz"
+        gh release create "${{ env.GIT_SHORT_HASH }}"
         "./${{ env.FILE_PATH }}"
         --generate-notes
-        --title "Release tpu-mlir_${{ env.GIT_SHORT_HASH }}.tar.gz"
+        --title "Release tpu-mlir_${{ env.GIT_SHORT_HASH }}-${{ env.BUILD_TIME }}.tar.gz"
 

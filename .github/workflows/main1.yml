@@ -59,7 +59,8 @@ jobs:
 
         docker run --privileged --name myname1234 -v $PWD:/workspace sophgo/tpuc_dev:v2.2 /bin/bash -c "
           # find . -type f -name "*.tar.gz" -exec rm -f {} \;
-          ./release.sh
+           source ./envsetup.sh
+           ./build.sh
           python setup.py bdist_wheel
         "
 

@@ -47,7 +47,7 @@ jobs:
     - name: Run Docker container
       run: |
         git describe --tags --always
-        docker run --privileged --name myname1234 -v $PWD:/workspace sophgo/tpuc_dev:v2.2 /bin/bash -c "
+        docker run --privileged --name myname1234 -v $PWD:/workspace sophgo/tpuc_dev:v3.1 /bin/bash -c "
           pwd
           ./release.sh
           source ./envsetup.sh

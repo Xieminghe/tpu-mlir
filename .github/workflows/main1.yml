@@ -1,4 +1,4 @@
-name: AAAA
+name: release whl packages
 
 on:
   push:
@@ -49,11 +49,10 @@ jobs:
         git describe --tags --always
         docker run --privileged --name myname1234 -v $PWD:/workspace sophgo/tpuc_dev:v2.2 /bin/bash -c "
           pwd
-          
+          ./release.sh
           source ./envsetup.sh
           ./build.sh
           python setup.py bdist_wheel
-          ./release.sh
         "
     - name: Find and copy .tar.gz file
       run: |
@@ -76,11 +75,11 @@ jobs:
         else
           echo "File not found in container"
         fi
-        WHL_FILE_PATH=${WHL_FILE_PATH#/workspace/}
+        WHL_FILE_PATH=${WHL_FILE_PATH#/workspace/dist/}
         echo "WHL_FILE_PATH=$WHL_FILE_PATH" >> $GITHUB_ENV
     - name: Release
       env:
-        GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: >-
         gh release create "${{ env.TAG }}"
         "./${{ env.FILE_PATH }}"
